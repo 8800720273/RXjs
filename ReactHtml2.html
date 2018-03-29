@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+	<meta charset="utf-8" />
+    <script src="https://unpkg.com/@reactivex/rxjs@5.5.7/dist/global/Rx.js"></script>
+    <script>
+        var button = document.querySelector('.button');
+        var label = document.querySelector('h4');
+        var clickStream = Rx.Observable.fromEvent(button, 'click');
+        var doubleClickStream = clickStream
+
+        .buffer(() => clickStream.throttle(250))
+        .map(arr => arr.length)
+        .filter(len => len === 2);
+        doubleClickStream.subscribe(event =>{
+            label.textContent='double click';
+        });
+
+        doubleClickStream
+        .throttle(3000)
+        .subscribe(suggestion => {
+            label.textContent = 'Go';
+        });
+    </script>
+</head>
+<body>
+    <button> Click Me!</button>
+    <h4><h4>
+</body>
+</html>
